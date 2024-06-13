@@ -101,11 +101,12 @@ class ViewController: UIViewController {
         return slider
     }()
     
-    let calculateButton: UIButton = {
+    lazy var calculateButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(red: 98/255, green: 96/255, blue: 153/255, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
         button.setTitle("CALCULATE", for: .normal)
+        button.addTarget(self, action: #selector(pressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -118,6 +119,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         constraints()
+    }
+    
+    @objc func pressed(_sender: UIButton) {
+        
+        let controller = ResultViewController()
+        present(controller, animated: true, completion: nil)
     }
     
     func constraints() {
