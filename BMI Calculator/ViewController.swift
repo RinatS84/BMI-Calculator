@@ -60,8 +60,11 @@ class ViewController: UIViewController {
         return label
     }()
     
-    let heighSlider: UISlider = {
+    lazy var heighSlider: UISlider = {
         let slider = UISlider()
+        slider.maximumValue = 3.0
+        
+        slider.addTarget(self, action: #selector(heightValue), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -95,8 +98,10 @@ class ViewController: UIViewController {
         return label
     }()
     
-    let weightSlider: UISlider = {
+    lazy var weightSlider: UISlider = {
         let slider = UISlider()
+        slider.addTarget(self, action: #selector(weightValue), for: .valueChanged)
+        slider.maximumValue = 200
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -106,24 +111,57 @@ class ViewController: UIViewController {
         button.backgroundColor = UIColor(red: 98/255, green: 96/255, blue: 153/255, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
         button.setTitle("CALCULATE", for: .normal)
-        button.addTarget(self, action: #selector(pressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(calculatePressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     
     
+    let controller = ResultViewController()
     
-
+//MARK: =ViewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         constraints()
     }
     
-    @objc func pressed(_sender: UIButton) {
+    @objc func heightValue(_sender: UISlider) {
+        let height = String(format: "%.2f", _sender.value)
+        metresLabel.text = "\(height) m"
         
-        let controller = ResultViewController()
+
+    }
+    
+    @objc func weightValue(_sender: UISlider) {
+        let weight = (Int(_sender.value))
+        kilogramsLabel.text = "\(weight) kg"
+
+    }
+    
+    @objc func calculatePressed(_sender: UIButton) {
+        
+        let height = heighSlider.value
+        let weight = weightSlider.value
+        let bmi = weight / (height * height)
+        if bmi < 18.5 {
+            controller.resultLabel.text = String(format: "%.1f", bmi)
+            controller.recommendationLabel.text = "Eat more"
+            controller.view.backgroundColor = UIColor(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
+        } else if bmi  < 27.9 {
+            controller.resultLabel.text = String(format: "%.1f", bmi)
+            controller.recommendationLabel.text = "Fit as a fiddle!"
+            controller.view.backgroundColor = UIColor(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)
+        } else {
+            controller.resultLabel.text = String(format: "%.1f", bmi)
+            controller.recommendationLabel.text = "Eat less pies!"
+            controller.view.backgroundColor = UIColor(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        }
+//        controller.resultLabel.text = String(format: "%.1f", bmi)
+        
+        
         present(controller, animated: true, completion: nil)
     }
     
