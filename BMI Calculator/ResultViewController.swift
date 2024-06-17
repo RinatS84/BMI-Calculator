@@ -4,6 +4,7 @@ import UIKit
 
 class ResultViewController: UIViewController {
     
+    
     let backgroundImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +35,7 @@ class ResultViewController: UIViewController {
     
     let resultLabel: UILabel = {
         let label = UILabel()
-        label.text = "19.5"
+        label.text = "0.0"
         label.font = .boldSystemFont(ofSize: 80)
         label.textColor = .white
         label.textAlignment = .center
@@ -52,18 +53,26 @@ class ResultViewController: UIViewController {
         return label
     }()
     
-    let  recalculateButton: UIButton = {
+    lazy var  recalculateButton: UIButton = {
         let button = UIButton()
         button.setTitle("RECALCULATE", for: .normal)
         button.backgroundColor = .white
         button.setTitleColor(.blue, for: .normal)
+        button.addTarget(self, action: #selector(recalculateButtonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var bmiValue: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        resultLabel.text = bmiValue
         constraints()
+    }
+    
+    @objc func recalculateButtonPressed(_sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+
     }
     
     func constraints() {
